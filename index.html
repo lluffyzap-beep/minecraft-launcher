@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MC Launcher</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- Partículas de fundo -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Tela de Login -->
+  <div class="screen" id="screen-login">
+    <div class="card">
+      <div class="logo-area">
+        <div class="creeper-face">
+          <div class="creeper-eyes">
+            <div class="eye"></div>
+            <div class="eye"></div>
+          </div>
+          <div class="creeper-mouth">
+            <div class="mouth-row">
+              <div class="m off"></div><div class="m on"></div><div class="m on"></div><div class="m off"></div>
+            </div>
+            <div class="mouth-row">
+              <div class="m on"></div><div class="m on"></div><div class="m on"></div><div class="m on"></div>
+            </div>
+            <div class="mouth-row">
+              <div class="m on"></div><div class="m off"></div><div class="m off"></div><div class="m on"></div>
+            </div>
+          </div>
+        </div>
+        <h1 class="title">MC Launcher</h1>
+        <p class="subtitle">Minecraft 1.8.9 · Java Edition</p>
+      </div>
+
+      <div class="form-area">
+        <button class="btn-microsoft" id="btn-login" onclick="loginMicrosoft()">
+          <svg width="20" height="20" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="9" height="9" fill="#F25022"/>
+            <rect x="11" y="1" width="9" height="9" fill="#7FBA00"/>
+            <rect x="1" y="11" width="9" height="9" fill="#00A4EF"/>
+            <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+          </svg>
+          Entrar com Microsoft
+        </button>
+
+        <div class="divider"><span>ou</span></div>
+
+        <div class="input-group">
+          <label>Nome de usuário (Demo)</label>
+          <input type="text" id="input-username" placeholder="Seu apelido" maxlength="16"/>
+        </div>
+        <button class="btn-demo" onclick="loginDemo()">Entrar no modo Demo</button>
+        <p class="demo-warning">⚠️ Modo Demo: funcionalidade limitada. Compre o jogo em minecraft.net</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tela Principal do Launcher -->
+  <div class="screen hidden" id="screen-main">
+    <div class="main-layout">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="user-info" id="user-info">
+          <div class="avatar" id="avatar">?</div>
+          <div class="user-details">
+            <span class="user-name" id="user-name">Jogador</span>
+            <span class="user-type" id="user-type">Demo</span>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-btn active" onclick="setTab('play', this)">▶ Jogar</button>
+          <button class="nav-btn" onclick="setTab('news', this)">📰 Novidades</button>
+          <button class="nav-btn" onclick="setTab('settings', this)">⚙️ Configurações</button>
+        </nav>
+
+        <button class="btn-logout" onclick="logout()">Sair</button>
+      </aside>
+
+      <!-- Conteúdo principal -->
+      <main class="content">
+
+        <!-- Aba: Jogar -->
+        <div class="tab active" id="tab-play">
+          <div class="play-hero">
+            <div class="version-badge">Java Edition · 1.8.9</div>
+            <h2>Pronto para jogar?</h2>
+            <p>Versão: <strong>1.8.9</strong> · PvP Clássico</p>
+            <button class="btn-play" id="btn-play" onclick="startGame()">
+              <span class="play-icon">▶</span> JOGAR
+            </button>
+            <div class="play-status" id="play-status"></div>
+          </div>
+
+          <div class="info-cards">
+            <div class="info-card">
+              <div class="info-icon">☁️</div>
+              <div>
+                <strong>Armazenamento</strong>
+                <p>Arquivos hospedados no GitHub — nada salvo no seu PC</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon">🔒</div>
+              <div>
+                <strong>Seguro</strong>
+                <p>Login oficial via Microsoft/Mojang</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon">⚡</div>
+              <div>
+                <strong>Rápido</strong>
+                <p>1.8.9 otimizado para PvP e servidores</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aba: Novidades -->
+        <div class="tab hidden" id="tab-news">
+          <h2 class="tab-title">📰 Novidades</h2>
+          <div id="news-list" class="news-list">
+            <div class="news-loading">Carregando novidades...</div>
+          </div>
+        </div>
+
+        <!-- Aba: Configurações -->
+        <div class="tab hidden" id="tab-settings">
+          <h2 class="tab-title">⚙️ Configurações</h2>
+          <div class="settings-list">
+            <div class="setting-item">
+              <label>RAM alocada (GB)</label>
+              <div class="setting-control">
+                <input type="range" id="ram" min="1" max="8" value="2" oninput="updateRam(this.value)"/>
+                <span id="ram-label">2 GB</span>
+              </div>
+            </div>
+            <div class="setting-item">
+              <label>Resolução</label>
+              <select id="resolution">
+                <option value="854x480">854×480</option>
+                <option value="1280x720" selected>1280×720</option>
+                <option value="1920x1080">1920×1080</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label>Versão do Java</label>
+              <select id="java-version">
+                <option value="8" selected>Java 8 (recomendado para 1.8.9)</option>
+                <option value="11">Java 11</option>
+                <option value="17">Java 17</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label>Argumentos JVM extras</label>
+              <input type="text" id="jvm-args" placeholder="-XX:+UseG1GC -XX:MaxGCPauseMillis=50"/>
+            </div>
+            <button class="btn-save" onclick="saveSettings()">💾 Salvar configurações</button>
+            <div class="save-msg hidden" id="save-msg">✅ Configurações salvas!</div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
